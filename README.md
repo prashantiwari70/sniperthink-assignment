@@ -1,293 +1,282 @@
-# SniperThink Full Stack Developer Assignment
+SniperThink Full Stack Developer Assignment
 
-This project implements the **SniperThink hiring assignment**, consisting of:
+This project implements the SniperThink hiring assignment, consisting of:
 
-1. **Interactive Strategy Flow Frontend**
-2. **Distributed File Processing Backend**
+Interactive Strategy Flow Frontend
 
-The system demonstrates **modern React UI development and scalable backend architecture using queues and background workers**.
+Distributed File Processing Backend
 
----
+The system demonstrates modern React UI development and scalable backend architecture using queues and background workers.
 
-# 1. Frontend Overview
+Live Demo
+
+Frontend deployed on Vercel:
+
+https://sniperthink-assignment-eta.vercel.app/
+
+Tech Stack
+Frontend
+
+React
+
+Vite
+
+TailwindCSS
+
+Framer Motion
+
+Backend
+
+Node.js
+
+Express.js
+
+Database
+
+MySQL
+
+Queue System
+
+Redis
+
+BullMQ
+
+File Handling
+
+Multer
+
+System Architecture
+Frontend (React + Vite)
+        ↓
+REST API (Node.js + Express)
+        ↓
+Redis Queue (BullMQ)
+        ↓
+Background Worker
+        ↓
+MySQL Database
+
+The system processes files asynchronously using background workers, ensuring the API remains responsive.
+
+1. Frontend Overview
 
 The frontend visually explains how the SniperThink strategy engine works through an interactive UI.
 
-## Features
+Features
 
-* Scroll-based storytelling section
-* Animated strategy cards
-* Hover interactions
-* Progress indicator
-* Interest form with backend integration
-* Responsive layout
+Scroll-based storytelling
 
-## Technology Stack
+Animated strategy cards
 
-* React (Functional Components + Hooks)
-* Vite
-* TailwindCSS
-* Framer Motion
+Hover interactions
 
-## Strategy Steps
+Progress indicator
 
-The strategy section dynamically renders steps from a data structure:
+Interest form with backend integration
 
-```
+Responsive layout
+
+Technology Stack
+
+React (Functional Components + Hooks)
+
+Vite
+
+TailwindCSS
+
+Framer Motion
+
+Strategy Steps
+
+The strategy section dynamically renders steps from a data structure.
+
 Market Research
 AI Analysis
 Strategic Planning
 Execution Intelligence
-```
 
-Users can click **“I'm Interested”** to submit their details.
+Users can click “I'm Interested” to submit their details.
 
----
+2. Backend Overview
 
-# 2. Backend Overview
+The backend provides a distributed file processing system.
 
-The backend provides a **distributed file processing system** that processes uploaded files asynchronously using **Redis queues and workers**.
+Uploaded files are processed asynchronously using a Redis queue and worker system.
 
-## Technology Stack
+Backend Features
 
-* Node.js
-* Express.js
-* MySQL
-* Redis
-* BullMQ
-* Multer
+File upload API
 
----
+Redis job queue
 
-# 3. Database Schema
+Background worker processing
 
-The system stores data in the following tables.
+MySQL data storage
 
-## Users
+Job progress tracking
 
-```
+3. Database Schema
+
+The system stores data using the following tables.
+
+Users
+
+Stores interest form submissions.
+
 id INT AUTO_INCREMENT PRIMARY KEY
 name VARCHAR(255)
 email VARCHAR(255)
-```
+Files
 
-Stores user interest form submissions.
+Stores uploaded file metadata.
 
----
-
-## Files
-
-```
 id INT AUTO_INCREMENT PRIMARY KEY
 file_path VARCHAR(255)
 uploaded_at TIMESTAMP
-```
+Jobs
 
-Stores uploaded file information.
+Tracks processing jobs.
 
----
-
-## Jobs
-
-```
 id INT AUTO_INCREMENT PRIMARY KEY
 file_id INT
 status VARCHAR(50)
 progress INT
 created_at TIMESTAMP
-```
 
-Tracks file processing jobs.
+Job statuses:
 
-Job statuses include:
-
-```
 pending
 processing
 completed
 failed
-```
+Results
 
----
+Stores processed document analysis results.
 
-## Results
-
-```
 id INT AUTO_INCREMENT PRIMARY KEY
 job_id INT
 word_count INT
 paragraph_count INT
 keywords TEXT
-```
+4. API Documentation
+Submit Interest
 
-Stores processed file analysis results.
+POST /api/interest
 
----
+Request Body
 
-# 4. API Documentation
-
-## Submit Interest
-
-POST `/api/interest`
-
-Request body:
-
-```
 {
  "name": "John",
  "email": "john@email.com",
  "step": "Market Research"
 }
-```
 
-Response:
+Response
 
-```
 {
  "message": "Interest received successfully"
 }
-```
+Upload File
 
----
+POST /api/upload
 
-## Upload File
+Form Data
 
-POST `/api/upload`
-
-Form Data:
-
-```
 file : PDF or TXT
-```
 
-Response:
+Response
 
-```
 {
  "message": "File uploaded and job created",
  "jobId": 5
 }
-```
+Get Job Status
 
----
+GET /api/job/:jobId
 
-## Get Job Status
+Example
 
-GET `/api/job/:jobId`
-
-Example:
-
-```
 GET /api/job/5
-```
 
-Response:
+Response
 
-```
 {
  "id": 5,
  "status": "completed",
  "progress": 100
 }
-```
+Get Processing Result
 
----
+GET /api/result/:jobId
 
-## Get Processing Result
+Example
 
-GET `/api/result/:jobId`
-
-Example:
-
-```
 GET /api/result/5
-```
 
-Response:
+Response
 
-```
 {
  "job_id": 5,
  "word_count": 1200,
  "paragraph_count": 35,
  "keywords": ["data","analysis","market"]
 }
-```
-
----
-
-# 5. Setup Instructions
-
-## Clone Repository
-
-```
-git clone <repository-url>
+5. Setup Instructions
+Clone Repository
+git clone https://github.com/prashantiwari70/sniperthink-assignment.git
 cd sniperthink-assignment
-```
+Install Dependencies
 
----
+Frontend
 
-## Install Dependencies
-
-Frontend:
-
-```
 cd sniperthink-frontend
 npm install
-```
 
-Backend:
+Backend
 
-```
 cd sniperthink-backend
 npm install
-```
+6. Environment Configuration
 
----
+Create a .env file inside sniperthink-backend
 
-# 6. Running the Project
+PORT=5000
 
-Start Redis:
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=yourpassword
+DB_NAME=sniperthink
 
-```
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+7. Running the Project
+
+Start Redis
+
 redis-server
-```
 
-Start Backend:
+Start Backend
 
-```
 cd sniperthink-backend
 npm start
-```
 
-Start Worker:
+Start Worker
 
-```
 node src/workers/fileWorker.js
-```
 
-Start Frontend:
+Start Frontend
 
-```
 cd sniperthink-frontend
 npm run dev
-```
 
-Frontend runs at:
+Frontend runs at
 
-```
 http://localhost:5173
-```
+8. Worker & Queue Configuration
 
----
+The system uses BullMQ with Redis for background processing.
 
-# 7. Worker & Queue Configuration
-
-The system uses **BullMQ with Redis** for background job processing.
-
-## Flow
-
-```
+Processing Flow
 File Upload
      ↓
 Job Created
@@ -299,20 +288,17 @@ Worker picks job
 File processed
      ↓
 Results saved to database
-```
 
-Workers process jobs asynchronously to prevent blocking API requests.
+Workers process jobs asynchronously so API requests are not blocked.
 
----
-
-# 8. Project Structure
-
-```
-project-root
+9. Project Structure
+sniperthink-assignment
+│
 ├── sniperthink-frontend
 │   ├── components
 │   ├── sections
-│   └── data
+│   ├── data
+│   └── pages
 │
 ├── sniperthink-backend
 │   ├── routes
@@ -320,18 +306,7 @@ project-root
 │   ├── workers
 │   ├── config
 │   └── server.js
-```
-
----
-
-# 9. Live Demo
-
-Frontend deployed using **Vercel**.
-
----
-
-# 10. Author
+10. Author
 
 Prashant Tiwari
-
 Full Stack Developer
