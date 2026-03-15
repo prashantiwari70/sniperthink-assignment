@@ -8,63 +8,19 @@ Distributed File Processing Backend
 
 The system demonstrates modern React UI development and scalable backend architecture using queues and background workers.
 
-Live Demo
+1. Live Demo
 
 Frontend deployed on Vercel:
 
 https://sniperthink-assignment-eta.vercel.app/
 
-Tech Stack
-Frontend
-
-React
-
-Vite
-
-TailwindCSS
-
-Framer Motion
-
-Backend
-
-Node.js
-
-Express.js
-
-Database
-
-MySQL
-
-Queue System
-
-Redis
-
-BullMQ
-
-File Handling
-
-Multer
-
-System Architecture
-Frontend (React + Vite)
-        ↓
-REST API (Node.js + Express)
-        ↓
-Redis Queue (BullMQ)
-        ↓
-Background Worker
-        ↓
-MySQL Database
-
-The system processes files asynchronously using background workers, ensuring the API remains responsive.
-
-1. Frontend Overview
+2. Frontend Overview
 
 The frontend visually explains how the SniperThink strategy engine works through an interactive UI.
 
 Features
 
-Scroll-based storytelling
+Scroll-based storytelling section
 
 Animated strategy cards
 
@@ -88,7 +44,7 @@ Framer Motion
 
 Strategy Steps
 
-The strategy section dynamically renders steps from a data structure.
+The strategy section dynamically renders steps from a data structure:
 
 Market Research
 AI Analysis
@@ -97,45 +53,75 @@ Execution Intelligence
 
 Users can click “I'm Interested” to submit their details.
 
-2. Backend Overview
+3. Backend Overview
 
-The backend provides a distributed file processing system.
+The backend provides a distributed file processing system that processes uploaded files asynchronously using Redis queues and background workers.
 
-Uploaded files are processed asynchronously using a Redis queue and worker system.
+Technology Stack
 
-Backend Features
+Node.js
 
-File upload API
+Express.js
 
-Redis job queue
+MySQL
 
-Background worker processing
+Redis
 
-MySQL data storage
+BullMQ
 
-Job progress tracking
+Multer
 
-3. Database Schema
+4. System Architecture
 
-The system stores data using the following tables.
+The application follows a client → API → queue → worker → database architecture to ensure scalable file processing.
 
-Users
+User
+ ↓
+React Frontend
+ ↓
+Express API (Node.js)
+ ↓
+File Upload (Multer)
+ ↓
+MySQL Database (File + Job Entry)
+ ↓
+Redis Queue (BullMQ)
+ ↓
+Background Worker
+ ↓
+File Processing
+ ↓
+Result Stored in Database
+
+This architecture enables:
+
+Non-blocking API requests
+
+Scalable background processing
+
+Reliable job handling
+
+5. Database Schema
+
+The system uses MySQL to store uploaded files, job information, and processing results.
+
+Users Table
 
 Stores interest form submissions.
 
 id INT AUTO_INCREMENT PRIMARY KEY
 name VARCHAR(255)
 email VARCHAR(255)
-Files
+Files Table
 
 Stores uploaded file metadata.
 
 id INT AUTO_INCREMENT PRIMARY KEY
 file_path VARCHAR(255)
 uploaded_at TIMESTAMP
-Jobs
+Jobs Table
 
-Tracks processing jobs.
+Tracks file processing jobs.
 
 id INT AUTO_INCREMENT PRIMARY KEY
 file_id INT
@@ -143,13 +129,13 @@ status VARCHAR(50)
 progress INT
 created_at TIMESTAMP
 
-Job statuses:
+Job statuses include:
 
 pending
 processing
 completed
 failed
-Results
+Results Table
 
 Stores processed document analysis results.
 
@@ -158,12 +144,16 @@ job_id INT
 word_count INT
 paragraph_count INT
 keywords TEXT
-4. API Documentation
+6. API Documentation
+
+Base URL
+
+http://localhost:5000/api
 Submit Interest
 
 POST /api/interest
 
-Request Body
+Request body:
 
 {
  "name": "John",
@@ -171,7 +161,7 @@ Request Body
  "step": "Market Research"
 }
 
-Response
+Response:
 
 {
  "message": "Interest received successfully"
@@ -180,11 +170,11 @@ Upload File
 
 POST /api/upload
 
-Form Data
+Form Data:
 
 file : PDF or TXT
 
-Response
+Response:
 
 {
  "message": "File uploaded and job created",
@@ -194,11 +184,11 @@ Get Job Status
 
 GET /api/job/:jobId
 
-Example
+Example:
 
 GET /api/job/5
 
-Response
+Response:
 
 {
  "id": 5,
@@ -209,11 +199,11 @@ Get Processing Result
 
 GET /api/result/:jobId
 
-Example
+Example:
 
 GET /api/result/5
 
-Response
+Response:
 
 {
  "job_id": 5,
@@ -221,7 +211,7 @@ Response
  "paragraph_count": 35,
  "keywords": ["data","analysis","market"]
 }
-5. Setup Instructions
+7. Setup Instructions (Run Locally)
 Clone Repository
 git clone https://github.com/prashantiwari70/sniperthink-assignment.git
 cd sniperthink-assignment
@@ -236,9 +226,13 @@ Backend
 
 cd sniperthink-backend
 npm install
-6. Environment Configuration
+8. Environment Setup
 
-Create a .env file inside sniperthink-backend
+Create a .env file inside:
+
+sniperthink-backend
+
+Example configuration:
 
 PORT=5000
 
@@ -249,7 +243,7 @@ DB_NAME=sniperthink
 
 REDIS_HOST=127.0.0.1
 REDIS_PORT=6379
-7. Running the Project
+9. Running the Project
 
 Start Redis
 
@@ -269,12 +263,12 @@ Start Frontend
 cd sniperthink-frontend
 npm run dev
 
-Frontend runs at
+Frontend runs at:
 
 http://localhost:5173
-8. Worker & Queue Configuration
+10. Worker / Queue Configuration
 
-The system uses BullMQ with Redis for background processing.
+The system uses BullMQ with Redis to process jobs asynchronously.
 
 Processing Flow
 File Upload
@@ -289,16 +283,14 @@ File processed
      ↓
 Results saved to database
 
-Workers process jobs asynchronously so API requests are not blocked.
+Workers run independently from the API server, ensuring that heavy file processing tasks do not block API requests.
 
-9. Project Structure
-sniperthink-assignment
-│
+11. Project Structure
+project-root
 ├── sniperthink-frontend
 │   ├── components
 │   ├── sections
-│   ├── data
-│   └── pages
+│   └── data
 │
 ├── sniperthink-backend
 │   ├── routes
@@ -306,7 +298,7 @@ sniperthink-assignment
 │   ├── workers
 │   ├── config
 │   └── server.js
-10. Author
+12. Author
 
 Prashant Tiwari
 Full Stack Developer
